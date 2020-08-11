@@ -16,7 +16,6 @@ for m in range(N):
 dx = [-1,1, 0, 0]
 dy = [0, 0, -1, 1]
 
-breaker = False
 
 #bfs
 while len(queue) > 0:
