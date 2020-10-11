@@ -39,8 +39,8 @@ class _CircularDoublyLinkedBase:
   def _insert_between(self, e, predecessor, successor):
     """Add element e between two existing nodes and return new node."""
     newest = self._Node(e, predecessor, successor) # 노드 생성
-    predecessor._next = newest
-    successor._prev = newest
+    predecessor._next = newest # 새 노드를 끼워넣을 두 노드 중 앞노드와 연결
+    successor._prev = newest # 뒤 노드와도 연결
     self._size += 1
     return newest
 
@@ -48,11 +48,11 @@ class _CircularDoublyLinkedBase:
     """Delete nonsentinel node from the list and return its element."""
     predecessor = node._prev
     successor = node._next
-    predecessor._next = successor
+    predecessor._next = successor #노드의 앞 노드와 뒷 노드를 서로 연결
     successor._prev = predecessor
     self._size -= 1
     element = node._element # 삭제 원소 담기
-    node._prev = node._next = node._element = None # 노드 none처리
+    node._prev = node._next = node._element = None # 노드 none처리해서 가비지콜렉팅 쉽게 한다
     return element                                 # return deleted element
 
   def __iter__(self):  # generator 정의
@@ -88,7 +88,7 @@ class CircularLinkedDeque(_CircularDoublyLinkedBase):         # note the use of 
     if self.is_empty():
         raise Empty("Deque is empty")
     tail = self._header._prev
-    return tail # 원형 연결리스트는 트레일러 없으므로 헤더 앞 원소 리턴
+    return tail # 원형 양방향연결덱은 트레일러 없으므로 헤더 앞 원소 리턴
 
   def insert_first(self, e):
     """Add an element to the front of the deque."""
@@ -96,7 +96,8 @@ class CircularLinkedDeque(_CircularDoublyLinkedBase):         # note the use of 
 
   def insert_last(self, e):
     """Add an element to the back of the deque."""
-    self._insert_between(e, self._trailer._prev, self.trailer) #트레일러 직전 노드와 트레일러 사이 새로운 노드 삽입
+    tail = self._header._prev
+    self._insert_between(e,tail, self._header) # 맨 마지막 노드와 헤더 사이 새로운 노드 삽입
 
   def delete_first(self):
     """Remove and return the element from the front of the deque.
